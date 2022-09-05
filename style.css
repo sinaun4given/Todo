@@ -1,0 +1,12 @@
+.styles{
+    display:flex ;
+    background-color: gold;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    right: -100%;
+    transition: all 0.3s ease;
+    
+    
+    
+}
