@@ -1,6 +1,6 @@
 .styles{
     display:flex ;
-    background-color: gold;
+    background-image: linear-gradient( yellow,rgb(184, 180, 158));
     position: fixed;
     top: 0;
     width: 100%;
@@ -9,4 +9,20 @@
     
     
     
+}
+
+body{
+    background-image: url(./kali-linux-wallpaper-v6.png);
+}
+.todo{
+    display: flex;
+flex-wrap: wrap;
+justify-content: center;
+
+
+}
+.wrap{
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center;
 }
