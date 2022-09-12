@@ -2,15 +2,21 @@
     display:flex ;
     background-image: linear-gradient( yellow,rgb(184, 180, 158));
     position: fixed;
-    top: 0;
+    top: 10px;
     width: 100%;
     right: -100%;
-    transition: all 0.3s ease;
+    transition: all 5.8s ease;
     
+    justify-content: center;
+    align-items: center;
     
     
 }
 
+.btn{
+    width: 100px;
+    height: 100px;
+}
 body{
     background-image: url(./kali-linux-wallpaper-v6.png);
 }
@@ -18,7 +24,7 @@ body{
     display: flex;
 flex-wrap: wrap;
 justify-content: center;
-
+color: aliceblue;
 
 }
 .wrap{
