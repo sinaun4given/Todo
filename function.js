@@ -20,11 +20,14 @@ const todoMain = document.getElementById("main");
 
 
 /////
-
+function getLocatedTodos(){
 const SavedLCTodos = localStorage.getItem("Todoslist");
-
 //inja migim age     in qesmat undifind bud areye khali bar gardoon 
-const parseLCtodos = JSON.parse(SavedLCTodos) || [];
+ return JSON.parse(SavedLCTodos)?.sort((a,b)=> a.id-b.id)|| [];
+
+
+}
+
 
 
 const CreateNewTodo = (title,desc,id,cheked) =>{
@@ -40,6 +43,11 @@ todoTIitleHeading.disabled=true;
 todoTIitleHeading.defaultValue=title;
 
 todoTIitleHeading.style.backgroundColor="orange"
+if (cheked===true){
+    
+    todoTIitleHeading.style.backgroundColor="green"
+  
+}
 
 const todoDescPara =document.createElement("p");
 todoDescPara.style.color="white";
@@ -55,13 +63,15 @@ const todoAction =`
 <button>Update</button>
 </div>
 `
+
 todoMain.appendChild(listItem);
 listItem.innerHTML+=todoAction;
+
 
 }
 
 
-let saveTodo=[...parseLCtodos];
+let saveTodo=[...getLocatedTodos()];
 
 
 ////
@@ -72,11 +82,13 @@ todoMain.addEventListener("click",(e) =>{
     if(e.target.innerText==="Del"){
         const todoEl =e.target.parentElement.parentElement;
         console.log(todoEl.id);
-        const filtredTodos = saveTodo.filter(
+        const filtredTodos = getLocatedTodos().filter(
             (item) => item.id !== Number(todoEl.id));
             
             localStorage.setItem("Todoslist",JSON.stringify(filtredTodos));
-             location.reload();
+            todoMain.innerHTML="";
+            renderTodosElements()
+            
      }
 
 
@@ -84,17 +96,20 @@ todoMain.addEventListener("click",(e) =>{
          //get li element
         const todoEl =e.target.parentElement.parentElement;
         //get our todo in localstoreg with id
-        const filtredTodo = saveTodo.filter((item) => item.id === Number(todoEl.id));
+        const filtredTodo = getLocatedTodos().filter((item) => item.id === Number(todoEl.id));
            //update our todo in local witj id
         const updateFiltredTodo = {...filtredTodo[0], cheked:true };
 //delet our todo from local
-        const filtredTodos =saveTodo.filter((item) => item.id !== Number(todoEl.id))
+        const filtredTodos =getLocatedTodos().filter((item) => item.id !== Number(todoEl.id))
 //update local with update todo
             const updateSaveTodos=[...filtredTodos,updateFiltredTodo]
             todoEl.children[0].style.backgroundColor="green"
             localStorage.setItem("Todoslist",JSON.stringify(updateSaveTodos));
-            location.reload();
-             }
+            todoMain.innerHTML=""
+            renderTodosElements();
+            
+           
+            }
     else if(e.target.innerText === "Edit"){
         const todoEl =e.target.parentElement.parentElement;
         todoEl.children[0].disabled=false;
@@ -102,21 +117,26 @@ todoMain.addEventListener("click",(e) =>{
 
         e.target.innerText="Save"
         e.target.addEventListener("click", () =>{
-            
             todoEl.children[0].disabled=true;
-
-
-            const filtredTodo = saveTodo.filter((item) => item.id === Number(todoEl.id));
            
-            const updateFiltredTodo = {...filtredTodo[0], title:todoEl.children[0].value };
-    
-            const filtredTodos =saveTodo.filter((item) => item.id !== Number(todoEl.id))
-    
-                const updateSaveTodos=[...filtredTodos,updateFiltredTodo]
-                todoEl.children[0].style.backgroundColor="green"
-                localStorage.setItem("Todoslist",JSON.stringify(updateSaveTodos));
-
-                location.reload();
+            
+            const filtredTodo = getLocatedTodos().filter((item) => item.id === Number(todoEl.id));
+            
+            const updateFiltredTodo = {...filtredTodo[0],cheked:true  ,title:todoEl.children[0].value };
+            
+            const filtredTodos =getLocatedTodos().filter((item) => item.id !== Number(todoEl.id))
+            
+            const updateSaveTodos=[...filtredTodos,updateFiltredTodo]
+            localStorage.setItem("Todoslist",JSON.stringify(updateSaveTodos));
+            
+            todoMain.innerHTML=""
+            renderTodosElements();
+            
+               
+               
+         
+                
+                
         }
 
         )
@@ -129,7 +149,13 @@ todoMain.addEventListener("click",(e) =>{
 ////
     
 //handle add new todo 
-saveTodo.forEach(todo=> CreateNewTodo(todo.title,todo.desc,todo.id,todo.cheked));
+function renderTodosElements(){
+   
+    getLocatedTodos().forEach(todo=> CreateNewTodo(todo.title,todo.desc,todo.id,todo.cheked));
+    
+}
+renderTodosElements();
+
 export const handleCraeteNewTodo = (event) => {
     event.preventDefault();
     if(!(todoTitle.value || todoDesc.value) ) {return alertsss("لطفن جای خالی را پر بفرمایید!",{time: "5000",type:"warn"});}
